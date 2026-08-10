@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+:root {
+  --background-primary: #0f1010;
+  --background-card: #1a1c1c;
+  --background-elevated: #222424;
+  --border: #2a2d2d;
+  --text-primary: #ffffff;
+  --text-secondary: #9ca3af;
+  --accent-green: #84cc16;
+  --accent-green-bright: #a3e635;
+  --status-red: #ef4444;
+  --status-yellow: #f59e0b;
+  --status-green: #22c55e;
+}
+
+* {
+  @apply border-[#2a2d2d];
+}
+
+body {
+  @apply bg-[#0f1010] text-[#ffffff];
+}
+
+.card {
+  @apply rounded-xl border border-[#2a2d2d] bg-[#1a1c1c];
+}
+
+.btn-primary {
+  @apply bg-[#84cc16] text-black font-bold hover:bg-[#a3e635] transition-colors;
+}
+
+.btn-primary-outlined {
+  @apply border border-[#84cc16] text-[#84cc16] font-bold hover:bg-[#84cc16] hover:text-black transition-colors;
+}

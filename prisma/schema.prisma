@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  username      String    @unique
+  email         String    @unique
+  password      String
+  role          Role      @default(CREATOR)
+  bio           String?
+  avatarUrl     String?
+  bannerUrl     String?
+  memberSince   DateTime  @default(now())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  pages         Page[]
+  submissions   Submission[]
+  earnings      Earning[]
+  campaignJoins CampaignMember[]
+}
+
+model Page {
+  id            String    @id @default(cuid())
+  userId        String
+  platform      Platform
+  handle        String
+  followersCount Int     @default(0)
+  verifiedAt    DateTime?
+  createdAt     DateTime  @default(now())
+
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  submissions   Submission[]
+
+  @@unique([userId, platform, handle])
+}
+
+model Campaign {
+  id              String    @id @default(cuid())
+  slug            String    @unique
+  title           String
+  description     String
+  whatWeLookingFor String
+  requiredHashtag String
+  posterUrl       String?
+  status          CampaignStatus @default(ACTIVE)
+  totalBudget     Float
+  paidOut         Float     @default(0)
+  cpmRate         Float
+  maxPerCreator   Float
+  maxPerVideo     Float
+  minViewsForPayout Int
+  launchDate      DateTime  @default(now())
+  endDate         DateTime?
+  createdById     String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  platforms       CampaignPlatform[]
+  submissions     Submission[]
+  members         CampaignMember[]
+  analytics       CampaignAnalytic[]
+}
+
+model CampaignPlatform {
+  id          String    @id @default(cuid())
+  campaignId  String
+  platform    Platform
+
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, platform])
+}
+
+model CampaignMember {
+  id          String    @id @default(cuid())
+  campaignId  String
+  userId      String
+  joinedAt    DateTime  @default(now())
+
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, userId])
+}
+
+model Submission {
+  id          String    @id @default(cuid())
+  campaignId  String
+  userId      String
+  pageId      String
+  videoUrl    String
+  status      SubmissionStatus @default(PENDING)
+  viewCount   Int       @default(0)
+  earnedAmount Float    @default(0)
+  submittedAt DateTime  @default(now())
+  reviewedAt  DateTime?
+  updatedAt   DateTime  @updatedAt
+
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  page        Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  viewSnapshots ViewSnapshot[]
+}
+
+model ViewSnapshot {
+  id           String    @id @default(cuid())
+  submissionId String
+  viewCount    Int
+  recordedAt   DateTime  @default(now())
+
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+}
+
+model CampaignAnalytic {
+  id          String    @id @default(cuid())
+  campaignId  String
+  date        DateTime  @default(now())
+  totalViews  Int       @default(0)
+
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model Earning {
+  id          String    @id @default(cuid())
+  userId      String
+  amount      Float
+  status      EarningStatus @default(PENDING)
+  description String?
+  createdAt   DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  CREATOR
+  BRAND
+  ADMIN
+}
+
+enum Platform {
+  TIKTOK
+  INSTAGRAM
+  FACEBOOK
+}
+
+enum CampaignStatus {
+  ACTIVE
+  COMPLETED
+  PAUSED
+  DRAFT
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  DENIED
+}
+
+enum EarningStatus {
+  PENDING
+  PAID
+  FROZEN
+}
