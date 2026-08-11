@@ -9,6 +9,7 @@ import {
   Megaphone,
   BarChart3,
   LogOut,
+  LogIn,
   Settings,
 } from "lucide-react"
 import { signOut, useSession } from "next-auth/react"
@@ -96,18 +97,20 @@ export function Sidebar() {
           <span>Campaigns</span>
         </Link>
 
-        <Link
-          href="/my-campaigns"
-          className={cn(
-            "flex items-center gap-3 px-3 py-2 rounded-md transition-colors border-l-2",
-            isActive("/my-campaigns")
-              ? "border-[#84cc16] bg-[#1a1c1c] text-white"
-              : "border-transparent text-[#9ca3af] hover:text-white hover:bg-[#1a1c1c]"
-          )}
-        >
-          <BarChart3 size={18} />
-          <span>My Campaigns</span>
-        </Link>
+        {session && (
+          <Link
+            href="/my-campaigns"
+            className={cn(
+              "flex items-center gap-3 px-3 py-2 rounded-md transition-colors border-l-2",
+              isActive("/my-campaigns")
+                ? "border-[#84cc16] bg-[#1a1c1c] text-white"
+                : "border-transparent text-[#9ca3af] hover:text-white hover:bg-[#1a1c1c]"
+            )}
+          >
+            <BarChart3 size={18} />
+            <span>My Campaigns</span>
+          </Link>
+        )}
 
         {(session?.user as any)?.role === "ADMIN" && (
           <>
@@ -133,13 +136,23 @@ export function Sidebar() {
 
       {/* User Section */}
       <div className="border-t border-[#2a2d2d] p-4">
-        <button
-          onClick={() => signOut({ callbackUrl: "/login" })}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#9ca3af] hover:text-white hover:bg-[#1a1c1c] transition-colors"
-        >
-          <LogOut size={18} />
-          <span>Sign out</span>
-        </button>
+        {session ? (
+          <button
+            onClick={() => signOut({ callbackUrl: "/campaigns" })}
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#9ca3af] hover:text-white hover:bg-[#1a1c1c] transition-colors"
+          >
+            <LogOut size={18} />
+            <span>Sign out</span>
+          </button>
+        ) : (
+          <Link
+            href="/login"
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#9ca3af] hover:text-white hover:bg-[#1a1c1c] transition-colors"
+          >
+            <LogIn size={18} />
+            <span>Sign in</span>
+          </Link>
+        )}
       </div>
     </aside>
   )

@@ -8,10 +8,15 @@ import { StatCard } from "@/components/shared/StatCard"
 import { CampaignCard } from "@/components/campaigns/CampaignCard"
 import { Eye, BarChart3, TrendingUp } from "lucide-react"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 
 export default async function HomePage() {
   const session = await auth()
-  if (!(session as any)?.user?.id) return null
+
+  // The home dashboard is personal; send signed-out visitors to public browsing.
+  if (!(session as any)?.user?.id) {
+    redirect("/campaigns")
+  }
 
   const [user, userCampaigns, activeCampaigns, userEarnings] = await Promise.all([
     prisma.user.findUnique({
