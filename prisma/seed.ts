@@ -20,11 +20,11 @@ async function main() {
   await prisma.user.deleteMany()
 
   // Create admin user
-  const adminPassword = await bcryptjs.hash("admin123", 10)
+  const adminPassword = await bcryptjs.hash("24kantajay", 10)
   const admin = await prisma.user.create({
     data: {
       username: "admin",
-      email: "admin@ultimate.com",
+      email: "kantajay381@gmail.com",
       password: adminPassword,
       role: "ADMIN",
     },
@@ -205,7 +205,7 @@ async function main() {
 
   console.log("✅ Seeding completed successfully!")
   console.log("\n📝 Test Credentials:")
-  console.log("   Admin: admin@ultimate.com / admin123")
+  console.log("   Admin: kantajay381@gmail.com / 24kantajay")
   console.log("   Creator: creator1@ultimate.com / password123")
 }
 

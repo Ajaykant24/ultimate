@@ -32,7 +32,16 @@ export default function LoginPage() {
         return
       }
 
-      router.push("/")
+      // Return the user to the page that sent them here, if any. Only accept
+      // same-site paths: "//host" is protocol-relative and would leave the site.
+      const callbackUrl = new URLSearchParams(window.location.search).get(
+        "callbackUrl"
+      )
+      const isSafePath =
+        !!callbackUrl &&
+        callbackUrl.startsWith("/") &&
+        !callbackUrl.startsWith("//")
+      router.push(isSafePath ? callbackUrl : "/")
     } catch (error) {
       setError("An error occurred. Please try again.")
     } finally {

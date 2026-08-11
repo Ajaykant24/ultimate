@@ -7,10 +7,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { formatViews, formatCurrency } from "@/lib/utils"
 import { TrendingUp } from "lucide-react"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 
 export default async function MyActiveCampaignsPage() {
   const session = await auth()
-  if (!(session as any)?.user?.id) return null
+
+  // Personal page: the shared layout no longer gates access, so guard here.
+  if (!(session as any)?.user?.id) {
+    redirect("/login")
+  }
 
   const myCampaigns = await prisma.campaignMember.findMany({
     where: { userId: (session as any)?.user.id },

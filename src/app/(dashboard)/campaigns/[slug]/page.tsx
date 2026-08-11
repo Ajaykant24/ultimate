@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -363,9 +364,15 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
                 />
               </div>
 
-              <Button className="w-full mt-4">
-                {session ? "Submit Video" : "Join Campaign"}
-              </Button>
+              {session ? (
+                <Button className="w-full mt-4">Submit Video</Button>
+              ) : (
+                <Button asChild className="w-full mt-4">
+                  <Link href={`/login?callbackUrl=/campaigns/${campaign.slug}`}>
+                    Sign in to join
+                  </Link>
+                </Button>
+              )}
             </CardContent>
           </Card>
         </div>

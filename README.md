@@ -107,7 +107,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ### Test Credentials
 
 After seeding:
-- **Admin:** admin@ultimate.com / admin123
+- **Admin:** the email and password set in `prisma/seed.ts`
 - **Creator:** creator1@ultimate.com / password123
 
 ## Deployment on Vercel

@@ -138,7 +138,7 @@ DATABASE_URL="your-production-database-url" npx tsx ./prisma/seed.ts
 ```
 
 This will create:
-- 1 admin user: admin@ultimate.com / admin123
+- 1 admin user (credentials set in `prisma/seed.ts`)
 - 5 test creator accounts
 - 8 sample campaigns with real data
 
@@ -149,9 +149,7 @@ This will create:
 Once deployed:
 
 1. Visit your Vercel URL: `https://your-project-name.vercel.app`
-2. Try logging in with test credentials:
-   - Email: admin@ultimate.com
-   - Password: admin123
+2. Try logging in with the admin credentials set in `prisma/seed.ts`
 3. Check that campaigns load on `/campaigns`
 4. Test API: `https://your-project-name.vercel.app/api/campaigns`
 

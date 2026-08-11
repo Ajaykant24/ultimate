@@ -31,6 +31,14 @@ export function Topbar() {
         </div>
 
         {/* User Avatar & Menu */}
+        {!session ? (
+          <Link
+            href="/login"
+            className="px-4 py-2 rounded-md bg-[#84cc16] text-black font-semibold text-sm hover:bg-[#a3e635] transition-colors"
+          >
+            Sign in
+          </Link>
+        ) : (
         <div className="relative">
           <button
             onClick={() => setShowUserMenu(!showUserMenu)}
@@ -67,7 +75,7 @@ export function Topbar() {
                 Settings
               </Link>
               <button
-                onClick={() => signOut({ callbackUrl: "/login" })}
+                onClick={() => signOut({ callbackUrl: "/campaigns" })}
                 className="w-full text-left px-4 py-2 hover:bg-[#222424] text-white text-sm border-t border-[#2a2d2d]"
               >
                 Sign out
@@ -75,6 +83,7 @@ export function Topbar() {
             </div>
           )}
         </div>
+        )}
       </div>
     </header>
   )
