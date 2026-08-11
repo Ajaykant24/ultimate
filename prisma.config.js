@@ -1,10 +1,7 @@
-/** @type {import('@prisma/internals').GetPrismaClientConfig} */
-const config = {
+module.exports = {
   datasources: {
     db: {
-      url: process.env.DATABASE_URL,
-    },
-  },
-};
-
-module.exports = config;
+      url: process.env.DATABASE_URL
+    }
+  }
+}
